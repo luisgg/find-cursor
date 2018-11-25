@@ -1,0 +1,12 @@
+Source: find-cursor
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Standards-Version: 3.9.8
+Build-Depends: debhelper (>= 9), libx11-dev, libxdamage-dev, libxrandr-dev
+
+Package: find-cursor
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Simple XLib program to highlight the cursor position
+ This is similar to the feature found in Windows XP (and possibly later?)

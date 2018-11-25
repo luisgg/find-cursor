@@ -1,0 +1,62 @@
+--- find-cursor/find-cursor.c	2018-11-24 10:11:55.865695597 +0100
++++ find-cursor/find-cursor.c.mod	2018-11-25 12:56:33.276476645 +0100
+@@ -38,11 +38,12 @@
+ 	{"transparent",   no_argument,       NULL, 't'},
+ 	{"grow",          no_argument,       NULL, 'g'},
+ 	{"outline",       no_argument,       NULL, 'o'},
++	{"endless",       no_argument,       NULL, 'e'},
+ 	{NULL, 0, NULL, 0}
+ }; 
+ 
+ void usage(char *name) {
+-	printf("Usage: %s [-stplcftg]\n\n", name);
++	printf("Usage: %s [-hsdlwcgftoe]\n\n", name);
+ 	printf("  -h, --help          Show this help.\n");
+ 	printf("\n");
+ 	printf("Shape options:\n");
+@@ -62,6 +63,8 @@
+ 	printf("                      it's disabled by default.\n");
+ 	printf("  -o, --outline       Draw an outline in the opposite color as well. Helps\n");
+ 	printf("                      visibility on all backgrounds.\n");
++	printf("  -e, --endless       Run forever in an endless loop and never exit. Use\n");
++	printf("                      in conjuntion with -f and -t for optimal results.\n");
+ 	printf("\n");
+ 	printf("Examples:\n");
+ 	printf("  The defaults:\n");
+@@ -95,9 +98,10 @@
+ 	int transparent = 0;
+ 	int grow = 0;
+ 	int outline = 0;
++	int endless = 0;
+ 
+ 	int ch;
+-	while ((ch = getopt_long(argc, argv, "hs:d:w:l:c:r:ftgo", longopts, NULL)) != -1)
++	while ((ch = getopt_long(argc, argv, "hs:d:w:l:c:r:ftgoe", longopts, NULL)) != -1)
+ 		switch (ch) {
+ 		case 's':
+ 			size = parse_num(ch, optarg, argv[0]);
+@@ -129,16 +133,20 @@
+ 		case 'o':
+ 			outline = 1;
+ 			break;
++		case 'e':
++			endless = 1;
++			break;
+ 		default:
+ 			usage(argv[0]);
+ 			exit(1);
+ 		}
+ 	argc -= optind; 
+ 	argv += optind;
+-
+-	draw(argv[0],
+-		size, distance, wait, line_width, color_name,
+-		follow, transparent, grow, outline);
++	do {
++		draw(argv[0],
++			size, distance, wait, line_width, color_name,
++			follow, transparent, grow, outline);
++	} while (endless) ;
+ }
+ 
+ void draw(
